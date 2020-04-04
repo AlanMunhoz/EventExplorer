@@ -1,12 +1,12 @@
 package com.example.eventExplorer.domain.model
 
-data class Event (
+class Event (
     val people: List<People>,
-    val data: Long,
+    val date: Long,
     val description: String,
     val image: String,
-    val longitude: Float,
-    val latitude: Float,
+    val longitude: Double,
+    val latitude: Double,
     val price: Float,
     val title: String,
     val id: String,

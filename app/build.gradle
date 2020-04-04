@@ -97,6 +97,17 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
+    /** picasso dependence **/
+    def picasso_version = "2.71828"
+    implementation "com.squareup.picasso:picasso:$picasso_version"
+
+    /** coordinator layout**/
+    def coordLayout_version = "1.1.0"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$coordLayout_version"
+
+    implementation 'com.google.android.material:material:1.1.0'
+
+
     /** Allows inspect database room by type "chrome://inspect" in Google Chrome**/
     implementation 'com.facebook.stetho:stetho:1.5.1'
 }

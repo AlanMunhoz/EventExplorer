@@ -11,9 +11,16 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        mainApplication = this
+
         startKoin {
             androidContext(this@MainApplication)
             modules(listOf(domainModule, dataModule))
         }
+    }
+
+    companion object {
+        var mainApplication : Application? = null
+        fun getContext() = mainApplication?.applicationContext
     }
 }
