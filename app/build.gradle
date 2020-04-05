@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.eventslist"
-        minSdkVersion 23
+        minSdkVersion 27
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -106,7 +106,6 @@ dependencies {
     implementation "androidx.coordinatorlayout:coordinatorlayout:$coordLayout_version"
 
     implementation 'com.google.android.material:material:1.1.0'
-
 
     /** Allows inspect database room by type "chrome://inspect" in Google Chrome**/
     implementation 'com.facebook.stetho:stetho:1.5.1'
