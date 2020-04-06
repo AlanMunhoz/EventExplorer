@@ -32,12 +32,12 @@ class EventViewModel(
 
     var eventList : ArrayList<Event> = ArrayList()
 
-    fun loadEvent(eventId: Int) {
+    fun loadEvent() {
         viewModelScope.launch {
             try {
                 _requestInProgress.postValue(true)
                 _event.postValue(getEvent(eventId))
-                this@EventViewModel.eventId++
+                eventId++
             } catch (e: Exception) {
                 _event.postValue(ResponseResult.Failure("ExceptionMessage: ${e.message}"))
                 e.printStackTrace()
@@ -54,6 +54,7 @@ class EventViewModel(
                 getEventList().apply {
                     if(this is ResponseResult.Success) {
                         eventList = ArrayList(data)
+                        eventId = eventList.lastOrNull()?.id?.toIntOrNull() ?: 0 + 1
                     }
                     _eventListResult.postValue(this)
                 }
@@ -66,19 +67,15 @@ class EventViewModel(
         }
     }
 
-    fun makeCheckin(position: Int) {
-        val checkin = Checkin("$position", "John Doe", "john.doe@gmail.com")
+    fun makeCheckin(position: String) {
+        val checkin = Checkin(position, "John Doe", "john.doe@gmail.com")
         viewModelScope.launch {
             try {
-                _requestInProgress.postValue(true)
                 postCheckin(checkin)
             } catch (e: Exception) {
                 _event.postValue(ResponseResult.Failure("ExceptionMessage: ${e.message}"))
                 e.printStackTrace()
-            } finally {
-                _requestInProgress.postValue(false)
             }
         }
     }
-
 }

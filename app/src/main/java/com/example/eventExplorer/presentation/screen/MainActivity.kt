@@ -1,11 +1,13 @@
 package com.example.eventExplorer.presentation.screen
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.eventExplorer.R
 import com.example.eventExplorer.data.util.toEventView
@@ -32,7 +34,7 @@ class MainActivity : AppCompatActivity(),
         viewModel.eventListResult.observe(this, Observer { responseResult ->
             when (responseResult) {
                 is ResponseResult.Success -> showResult(responseResult.data)
-                is ResponseResult.Failure -> showError(responseResult.message)
+                is ResponseResult.Failure -> showError()
             }
         })
 
@@ -48,6 +50,7 @@ class MainActivity : AppCompatActivity(),
         viewBinding.rvList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = EventAdapter(ArrayList(), this@MainActivity)
+            addOnScrollListener(onScrollListener)
         }
         viewBinding.srSwipeRefresh.setOnRefreshListener(this)
         viewModel.loadEventList()
@@ -60,20 +63,38 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
+    private val onScrollListener by lazy {
+        object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy == 0) return
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                if (layoutManager.findLastCompletelyVisibleItemPosition() == layoutManager.itemCount - 1) {
+                    viewModel.loadEvent()
+                }
+            }
+        }
+    }
+
     private fun showResult(result: List<Event>) {
         viewBinding.rvList.apply { (adapter as EventAdapter).setList(result.map { it.toEventView() }) }
     }
 
-    private fun showError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    private fun showError() {
+        Toast.makeText(this, getString(R.string.request_error), Toast.LENGTH_LONG).show()
     }
 
     override fun cardClick(position: Int) {
         DetailsActivity.start(this, viewModel.eventList[position])
     }
 
-    override fun checkinClick(position: Int) {
-        viewModel.makeCheckin(position)
+    override fun shareClick(position: Int) {
+        val target = Intent(Intent.ACTION_SEND)
+        target.type = "text/plain"
+        target.putExtra(Intent.EXTRA_TEXT, "${viewModel.eventList[position].title}")
+        startActivity(target)
     }
 
     override fun onRefresh() {

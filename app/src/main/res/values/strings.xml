@@ -2,4 +2,11 @@
     <string name="app_name">EventsList</string>
     <string name="about_label">Sobre</string>
     <string name="location_label">Localização</string>
+    <string name="data_format_error">Data não pôde ser convertido...</string>
+    <string name="address_format_error">Endereço não pôde ser convertido...</string>
+    <string name="request_error">Desculpe, encontramos um problema. Tente novamente.</string>
+    <string name="event_image">Imagem do evento</string>
+    <string name="calendar_icon">Ícone calendário</string>
+    <string name="local_icon">Ícone local</string>
+    <string name="ticket_icon">Ícone ticket</string>
 </resources>

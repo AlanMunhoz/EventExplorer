@@ -2,9 +2,9 @@ package com.example.eventExplorer.presentation.screen
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -27,10 +27,8 @@ import java.util.*
 class DetailsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val eventExtra by lazy { intent.getParcelableExtra(EVENT_EXTRA) as? Event }
-
     private lateinit var viewBinding: ActivityDetailsBinding
     private val viewModel: EventViewModel by viewModel()
-
     private var mapFragment: SupportMapFragment? = null
     private var mMap: GoogleMap? = null
 
@@ -55,27 +53,33 @@ class DetailsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         setSupportActionBar(viewBinding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        viewBinding.collapseToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white))
-        viewBinding.collapseToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white))
-        viewBinding.collapseToolbar.setContentScrimColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        viewBinding.collapseToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.primaryTextColor))
+        viewBinding.collapseToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.primaryTextColor))
+        viewBinding.collapseToolbar.setContentScrimColor(ContextCompat.getColor(this, R.color.primaryColor))
 
         mapFragment = supportFragmentManager.findFragmentById(viewBinding.mapView.id) as SupportMapFragment
         mapFragment?.getMapAsync(this)
 
         eventExtra?.let { event ->
             viewBinding.apply {
+                collapseToolbar.title = event.title
                 Picasso.get()
                     .load(event.image)
                     .placeholder(R.drawable.placeholder_img)
                     .error(R.drawable.error_img)
                     .into(viewBinding.photoView)
-
                 dateLabelView.text = Date(event.date).toFormattedString()
                 hourLabelView.text = Date(event.date).toHour()
                 cityLabelView.text = getCity(event.latitude, event.longitude)
                 addressLabelView.text = getFullAddress(event.latitude, event.longitude)
                 priceLabelView.text = event.price.toCurrency()
                 descLabelView.text = event.description
+            }
+        }
+
+        viewBinding.checkinFab.setOnClickListener {
+            eventExtra?.apply {
+                viewModel.makeCheckin(id)
             }
         }
     }
@@ -104,8 +108,8 @@ class DetailsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun setLocation(lat: Double, long: Double) {
         val position = LatLng(lat, long)
-        val name = "Name"
-        val address = "Address"
+        val name = eventExtra?.title
+        val address = getCity(lat, long)
         mMap?.apply {
             addMarker(MarkerOptions().position(position).title(name).snippet(address))
             animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15f))

@@ -19,10 +19,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBxRx6SNk-cL_ATziYBZ65Nqam-UTycWNc"/>
 
-        <activity android:name=".presentation.screen.DetailsActivity"
-            android:screenOrientation="locked"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
-
         <activity android:name=".presentation.screen.MainActivity"
             android:screenOrientation="locked">
             <intent-filter>
@@ -31,6 +27,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".presentation.screen.DetailsActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="locked"/>
+
     </application>
 
 </manifest>

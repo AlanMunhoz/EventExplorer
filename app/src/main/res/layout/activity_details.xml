@@ -5,7 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.example.eventExplorer.presentation.viewModel.EventViewModel" />
@@ -23,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true">
-            <!--        android:background="@color/clLightText">-->
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/collapse_toolbar"
@@ -36,7 +37,7 @@
                     android:id="@+id/photoView"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
-                    android:contentDescription=""
+                    android:contentDescription="@string/event_image"
                     android:scaleType="centerCrop" />
 
                 <androidx.appcompat.widget.Toolbar
@@ -83,12 +84,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvTitle">
+                    app:layout_constraintTop_toTopOf="@+id/tvTitle">
 
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/guideline1"
@@ -109,13 +109,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="32dp"
+                        android:contentDescription="@string/calendar_icon"
+                        android:tint="@color/primaryColor"
                         app:layout_constraintStart_toStartOf="@+id/guideline1"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_calendar" />
 
                     <TextView
                         android:id="@+id/dateLabelView"
-                        style="@style/TextViewDetails"
+                        style="@style/TextViewDetails1st"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="32dp"
@@ -126,7 +128,7 @@
 
                     <TextView
                         android:id="@+id/hourLabelView"
-                        style="@style/TextViewDetails"
+                        style="@style/TextViewDetails2nd"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -140,13 +142,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="32dp"
+                        android:contentDescription="@string/local_icon"
+                        android:tint="@color/primaryColor"
                         app:layout_constraintStart_toStartOf="@+id/guideline1"
                         app:layout_constraintTop_toBottomOf="@+id/hourLabelView"
                         app:srcCompat="@drawable/ic_pin" />
 
                     <TextView
                         android:id="@+id/cityLabelView"
-                        style="@style/TextViewDetails"
+                        style="@style/TextViewDetails1st"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="@+id/hourLabelView"
@@ -156,7 +160,7 @@
 
                     <TextView
                         android:id="@+id/addressLabelView"
-                        style="@style/TextViewDetails"
+                        style="@style/TextViewDetails2nd"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -170,13 +174,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="32dp"
+                        android:contentDescription="@string/ticket_icon"
+                        android:tint="@color/primaryColor"
                         app:layout_constraintStart_toStartOf="@+id/guideline1"
                         app:layout_constraintTop_toBottomOf="@+id/addressLabelView"
                         app:srcCompat="@drawable/ic_ticket" />
 
                     <TextView
                         android:id="@+id/priceLabelView"
-                        style="@style/TextViewDetails"
+                        style="@style/TextViewDetails1st"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintStart_toStartOf="@+id/guideline2"
@@ -190,7 +196,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="32dp"
                         android:layout_marginEnd="16dp"
-                        android:background="@color/colorPrimaryDark"
+                        android:background="@color/primaryColor"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ticketView" />
@@ -201,7 +207,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="32dp"
                         android:text="@string/about_label"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:textColor="@color/primaryDarkColor"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="@+id/guideline1"
@@ -209,7 +215,7 @@
 
                     <TextView
                         android:id="@+id/descLabelView"
-                        style="@style/TextViewDetails"
+                        style="@style/TextViewDetails1st"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -225,7 +231,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="32dp"
                         android:layout_marginEnd="16dp"
-                        android:background="@color/colorPrimaryDark"
+                        android:background="@color/primaryColor"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/descLabelView" />
@@ -235,12 +241,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="32dp"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:text="@string/location_label"
+                        android:textColor="@color/primaryDarkColor"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="@+id/guideline1"
-                        app:layout_constraintTop_toBottomOf="@+id/separator1View2"
-                        android:text="@string/location_label" />
+                        app:layout_constraintTop_toBottomOf="@+id/separator1View2" />
 
                     <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/mapView"
@@ -269,14 +275,12 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:contentDescription=""
-            android:onClick="@{() -> viewModel.makeCheckin(1)}"
-            android:tint="@color/colorPrimaryDark"
-            android:src="@drawable/ic_share"
-            app:backgroundTint="@color/white"
+            android:src="@drawable/ic_checkin"
+            android:tint="@color/primaryTextColor"
+            app:backgroundTint="@color/colorAccent"
             app:layout_anchor="@id/app_bar"
             app:layout_anchorGravity="end|bottom"
             app:maxImageSize="36dp" />
-
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

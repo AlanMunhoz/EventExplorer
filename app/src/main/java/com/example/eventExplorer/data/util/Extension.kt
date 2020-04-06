@@ -2,6 +2,7 @@ package com.example.eventExplorer.data.util
 
 import android.location.Geocoder
 import com.example.eventExplorer.MainApplication
+import com.example.eventExplorer.R
 import com.example.eventExplorer.domain.model.Event
 import com.example.eventExplorer.domain.model.ResponseResult
 import com.example.eventExplorer.presentation.screen.EventView
@@ -30,29 +31,29 @@ fun Event.toEventView() = EventView(
 fun Date?.toFormattedString() =
     this?.let {
         "${it.toWeekDay()}, ${it.toDayOfMonth()} de ${it.toMonth()}"
-    } ?: "Date couldn't be converted"
+    } ?: MainApplication.getContext()?.getString(R.string.data_format_error)
 
 fun Date?.toDayOfMonth() =
     this?.let {
         SimpleDateFormat("d", Locale("pt")).format(this)
-    } ?: "Date couldn't be converted"
+    } ?: MainApplication.getContext()?.getString(R.string.data_format_error) ?: ""
 
 fun Date?.toMonth() =
     this?.let {
         SimpleDateFormat("MMMM", Locale("pt")).format(this).capitalize()
-    } ?: "Date couldn't be converted"
+    } ?: MainApplication.getContext()?.getString(R.string.data_format_error) ?: ""
 
 fun Date?.toWeekDay() =
         this?.let {
         SimpleDateFormat("EEEE", Locale("pt")).format(this).capitalize()
-    } ?: "Date couldn't be converted"
+    } ?: MainApplication.getContext()?.getString(R.string.data_format_error) ?:""
 
 fun Date?.toHour() =
     this?.let {
         SimpleDateFormat("HH:mm", Locale("pt")).format(this)
-    } ?: "Hour couldn't be converted"
+    } ?: MainApplication.getContext()?.getString(R.string.data_format_error) ?:""
 
-fun Float.toCurrency(symbol: String = "R$") =
+fun Float.toCurrency(symbol: String = "R$"): String =
     (NumberFormat.getNumberInstance(Locale("pt")) as DecimalFormat)
         .apply {
             maximumFractionDigits = 2
@@ -66,15 +67,15 @@ fun Float.toCurrency(symbol: String = "R$") =
             else it
         }
 
-
 fun getFullAddress(latitude: Double, longitude: Double): String {
     val geocode = Geocoder(MainApplication.getContext(), Locale.getDefault())
     return geocode.getFromLocation(latitude, longitude, 1).firstOrNull() ?.
-        getAddressLine(0) ?: "Address couldn't be converted"
+        getAddressLine(0) ?: MainApplication.getContext()?.getString(R.string.address_format_error) ?:""
 }
 
 fun getCity(latitude: Double, longitude: Double): String {
     val geocode = Geocoder(MainApplication.getContext(), Locale.getDefault())
     return geocode.getFromLocation(latitude, longitude, 1).firstOrNull() ?.
-        subAdminArea ?: "Address couldn't be converted"
+        subAdminArea ?: MainApplication.getContext()?.getString(R.string.address_format_error) ?:""
 }
+

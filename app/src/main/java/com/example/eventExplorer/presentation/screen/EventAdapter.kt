@@ -15,7 +15,7 @@ class EventAdapter(
 
     interface ClickCallback {
         fun cardClick(position: Int)
-        fun checkinClick(position: Int)
+        fun shareClick(position: Int)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
@@ -25,7 +25,7 @@ class EventAdapter(
                 callback.cardClick(position)
             }
             checkinIcon.setOnClickListener {
-                callback.checkinClick(position)
+                callback.shareClick(position)
             }
         }
     }
