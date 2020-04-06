@@ -16,8 +16,6 @@ class EventViewModel(
     private val postCheckin: PostCheckin
 ) : ViewModel() {
 
-    var checkin = Checkin("1", "John Doe", "john.doe@gmail.com")
-
     var eventId: Int = 1
 
     private val _requestInProgress = MutableLiveData<Boolean>()
@@ -68,7 +66,8 @@ class EventViewModel(
         }
     }
 
-    fun makeCheckin(checkin: Checkin) {
+    fun makeCheckin(position: Int) {
+        val checkin = Checkin("$position", "John Doe", "john.doe@gmail.com")
         viewModelScope.launch {
             try {
                 _requestInProgress.postValue(true)

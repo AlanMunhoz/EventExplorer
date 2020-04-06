@@ -10,7 +10,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.eventExplorer.R
 import com.example.eventExplorer.data.util.toEventView
 import com.example.eventExplorer.databinding.ActivityMainBinding
-import com.example.eventExplorer.domain.model.Checkin
 import com.example.eventExplorer.domain.model.Event
 import com.example.eventExplorer.domain.model.ResponseResult
 import com.example.eventExplorer.presentation.viewModel.EventViewModel
@@ -31,26 +30,34 @@ class MainActivity : AppCompatActivity(),
         viewBinding.lifecycleOwner = this
 
         viewModel.eventListResult.observe(this, Observer { responseResult ->
-            viewBinding.srSwipeRefresh.isRefreshing = false
             when (responseResult) {
                 is ResponseResult.Success -> showResult(responseResult.data)
                 is ResponseResult.Failure -> showError(responseResult.message)
             }
         })
 
+        viewModel.requestInProgress.observe(this, Observer {
+            viewBinding.srSwipeRefresh.isRefreshing = it
+        })
+
+        initLayout()
+    }
+
+    private fun initLayout() {
+        setUpToolbar()
         viewBinding.rvList.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = EventAdapter(
-                ArrayList(),
-                this@MainActivity
-            )
+            adapter = EventAdapter(ArrayList(), this@MainActivity)
         }
-
-        /**
-         * Set listener to Swipe Refresh
-         */
         viewBinding.srSwipeRefresh.setOnRefreshListener(this)
         viewModel.loadEventList()
+    }
+
+    private fun setUpToolbar() {
+        setSupportActionBar(viewBinding.toolbar)
+        supportActionBar?.apply {
+            title = getString(R.string.app_name)
+        }
     }
 
     private fun showResult(result: List<Event>) {
@@ -62,15 +69,14 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun cardClick(position: Int) {
-        DetailsActivity.invoke(this, viewModel.eventList[position])
+        DetailsActivity.start(this, viewModel.eventList[position])
     }
 
     override fun checkinClick(position: Int) {
-        viewModel.makeCheckin(Checkin("$position", "John Doe", "john.joe@gmail.com"))
+        viewModel.makeCheckin(position)
     }
 
     override fun onRefresh() {
-        viewBinding.srSwipeRefresh.isRefreshing = true
         viewModel.loadEventList()
     }
 }

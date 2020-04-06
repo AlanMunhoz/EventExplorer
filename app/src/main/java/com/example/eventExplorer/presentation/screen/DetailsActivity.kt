@@ -2,11 +2,10 @@ package com.example.eventExplorer.presentation.screen
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import android.view.MenuItem
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.example.eventExplorer.R
@@ -19,7 +18,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.squareup.picasso.Picasso
@@ -50,10 +48,19 @@ class DetailsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
 
-        /** maps **/
+        initLayout()
+    }
+
+    private fun initLayout() {
+
+        setSupportActionBar(viewBinding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        viewBinding.collapseToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white))
+        viewBinding.collapseToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white))
+        viewBinding.collapseToolbar.setContentScrimColor(ContextCompat.getColor(this, R.color.colorPrimary))
+
         mapFragment = supportFragmentManager.findFragmentById(viewBinding.mapView.id) as SupportMapFragment
         mapFragment?.getMapAsync(this)
-
 
         eventExtra?.let { event ->
             viewBinding.apply {
@@ -71,27 +78,25 @@ class DetailsActivity : AppCompatActivity(), OnMapReadyCallback {
                 descLabelView.text = event.description
             }
         }
-
     }
 
-    private fun showResult(result: Event) {
-        Toast.makeText(this, result.title, Toast.LENGTH_LONG).show()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
-    private fun showError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-    }
+    private fun showResult(result: Event) {}
+
+    private fun showError(message: String) {}
 
     override fun onMapReady(p0: GoogleMap?) {
-
         mMap = p0
-
-        mMap?.setOnMarkerClickListener { arg0 ->
-            true
-        }
-
-        mMap?.setOnMapClickListener{ }
-
+        mMap?.uiSettings?.setAllGesturesEnabled(false)
         eventExtra?.apply {
             setLocation(latitude, longitude)
         }
@@ -101,23 +106,19 @@ class DetailsActivity : AppCompatActivity(), OnMapReadyCallback {
         val position = LatLng(lat, long)
         val name = "Name"
         val address = "Address"
-        mMap?.addMarker(
-            MarkerOptions().position(position).title(name).snippet(address)
-        )
-        /** posiciona câmera **/
-        mMap?.moveCamera(CameraUpdateFactory.newLatLng(position))
-        mMap?.animateCamera(CameraUpdateFactory.zoomTo(15f), 1000, null)
-        /** select type of map **/
-        mMap?.mapType = GoogleMap.MAP_TYPE_NORMAL
+        mMap?.apply {
+            addMarker(MarkerOptions().position(position).title(name).snippet(address))
+            animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15f))
+            mapType = GoogleMap.MAP_TYPE_NORMAL
+        }
     }
 
     companion object {
         private const val EVENT_EXTRA = "event_extra"
-        fun invoke(context: Context, event: Event) {
+        fun start(context: Context, event: Event) {
             val intent = Intent(context, DetailsActivity::class.java)
             intent.putExtra(EVENT_EXTRA, event)
             context.startActivity(intent)
         }
     }
-
 }
