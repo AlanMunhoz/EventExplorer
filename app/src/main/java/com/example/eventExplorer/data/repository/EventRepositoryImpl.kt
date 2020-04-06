@@ -19,6 +19,10 @@ class EventRepositoryImpl(
         return retrofitService.getEventResponse(eventId).responseResult()
     }
 
+    override suspend fun getEventList(): ResponseResult<List<Event>> {
+        return retrofitService.getEventListResponse().responseResult()
+    }
+
     override suspend fun postCheckin(checkin: Checkin) {
         retrofitService.postCheckin(checkin)
     }

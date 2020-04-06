@@ -14,18 +14,18 @@ class EventAdapter(
 ) : RecyclerView.Adapter<ItemViewHolder>() {
 
     interface ClickCallback {
-        fun cardClick(eventAdapterItem: EventView)
-        fun checkinClick(eventAdapterItem: EventView)
+        fun cardClick(position: Int)
+        fun checkinClick(position: Int)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bindView(eventList[position])
         holder.itemView.apply {
             card.setOnClickListener {
-                callback.cardClick(eventList[position])
+                callback.cardClick(position)
             }
             checkinIcon.setOnClickListener {
-                callback.checkinClick(eventList[position])
+                callback.checkinClick(position)
             }
         }
     }
@@ -41,6 +41,11 @@ class EventAdapter(
         eventList.add(eventItem)
         notifyDataSetChanged()
     }
+
+    fun setList(eventList: List<EventView>) {
+        this.eventList = ArrayList(eventList)
+        notifyDataSetChanged()
+    }
 }
 
 class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -53,17 +58,9 @@ class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             addressLabel.text = item.local
             Picasso.get()
                 .load(item.image)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_foreground)
+                .placeholder(R.drawable.placeholder_img)
+                .error(R.drawable.error_img)
                 .into(image)
-            val checkin: Boolean? = true
-            checkinIcon.setImageDrawable(
-                when (checkin) {
-                    true -> context.getDrawable(R.drawable.ic_launcher_background)
-                    false -> context.getDrawable(R.drawable.ic_launcher_foreground)
-                    else -> context.getDrawable(android.R.color.transparent)
-                }
-            )
         }
     }
 }

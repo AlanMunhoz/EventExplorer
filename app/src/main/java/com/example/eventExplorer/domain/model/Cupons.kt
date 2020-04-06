@@ -1,3 +1,7 @@
 package com.example.eventExplorer.domain.model
 
-data class Cupons(val id: String, val eventId: String, val discount: Int)
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class Cupons(val id: String, val eventId: String, val discount: Int) : Parcelable

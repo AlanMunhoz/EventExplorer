@@ -6,5 +6,6 @@ import com.example.eventExplorer.domain.model.ResponseResult
 
 interface EventRepository {
     suspend fun getEvent(eventId: Int) : ResponseResult<Event>
+    suspend fun getEventList() : ResponseResult<List<Event>>
     suspend fun postCheckin(checkin: Checkin)
 }

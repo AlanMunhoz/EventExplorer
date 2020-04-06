@@ -15,6 +15,9 @@ android {
         versionCode 1
         versionName "1.0"
 
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -106,6 +109,17 @@ dependencies {
     implementation "androidx.coordinatorlayout:coordinatorlayout:$coordLayout_version"
 
     implementation 'com.google.android.material:material:1.1.0'
+
+    /** maps **/
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
+    /** parcel dependence **/
+    implementation 'org.parceler:parceler-api:1.1.11'
+
+    /** Swipe refresh**/
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
 
     /** Allows inspect database room by type "chrome://inspect" in Google Chrome**/
     implementation 'com.facebook.stetho:stetho:1.5.1'

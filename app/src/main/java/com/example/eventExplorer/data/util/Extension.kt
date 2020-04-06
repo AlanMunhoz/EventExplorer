@@ -6,6 +6,8 @@ import com.example.eventExplorer.domain.model.Event
 import com.example.eventExplorer.domain.model.ResponseResult
 import com.example.eventExplorer.presentation.screen.EventView
 import retrofit2.Response
+import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,12 +24,12 @@ fun Event.toEventView() = EventView(
     image = this.image,
     day = Date(this.date).toDayOfMonth(),
     month = Date(this.date).toMonth(),
-    local = getShortAddress(this.latitude, this.longitude)
+    local = getCity(this.latitude, this.longitude)
 )
 
 fun Date?.toFormattedString() =
     this?.let {
-        SimpleDateFormat("dd/MM/yyy HH:mm", Locale("pt")).format(this)
+        "${it.toWeekDay()}, ${it.toDayOfMonth()} de ${it.toMonth()}"
     } ?: "Date couldn't be converted"
 
 fun Date?.toDayOfMonth() =
@@ -37,8 +39,33 @@ fun Date?.toDayOfMonth() =
 
 fun Date?.toMonth() =
     this?.let {
-        SimpleDateFormat("MMM", Locale("pt")).format(this).capitalize()
+        SimpleDateFormat("MMMM", Locale("pt")).format(this).capitalize()
     } ?: "Date couldn't be converted"
+
+fun Date?.toWeekDay() =
+        this?.let {
+        SimpleDateFormat("EEEE", Locale("pt")).format(this).capitalize()
+    } ?: "Date couldn't be converted"
+
+fun Date?.toHour() =
+    this?.let {
+        SimpleDateFormat("HH:mm", Locale("pt")).format(this)
+    } ?: "Hour couldn't be converted"
+
+fun Float.toCurrency(symbol: String = "R$") =
+    (NumberFormat.getNumberInstance(Locale("pt")) as DecimalFormat)
+        .apply {
+            maximumFractionDigits = 2
+            minimumFractionDigits = 2
+            applyPattern("###,###,##0.00")
+        }
+        .format(this)
+        .let {
+            if (it.isNotEmpty())
+                "$symbol $it"
+            else it
+        }
+
 
 fun getFullAddress(latitude: Double, longitude: Double): String {
     val geocode = Geocoder(MainApplication.getContext(), Locale.getDefault())
@@ -46,7 +73,7 @@ fun getFullAddress(latitude: Double, longitude: Double): String {
         getAddressLine(0) ?: "Address couldn't be converted"
 }
 
-fun getShortAddress(latitude: Double, longitude: Double): String {
+fun getCity(latitude: Double, longitude: Double): String {
     val geocode = Geocoder(MainApplication.getContext(), Locale.getDefault())
     return geocode.getFromLocation(latitude, longitude, 1).firstOrNull() ?.
         subAdminArea ?: "Address couldn't be converted"

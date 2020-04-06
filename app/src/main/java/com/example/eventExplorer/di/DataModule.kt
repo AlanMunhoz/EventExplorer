@@ -16,5 +16,5 @@ val dataModule = module {
     single { provideEventApi(get()) }
     single { provideEventService(get()) }
     single<EventRepository> { EventRepositoryImpl(get()) }
-    viewModel { EventViewModel(get(), get()) }
+    viewModel { EventViewModel(get(), get(), get()) }
 }

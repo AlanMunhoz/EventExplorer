@@ -1,5 +1,9 @@
 package com.example.eventExplorer.domain.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 class Event (
     val people: List<People>,
     val date: Long,
@@ -11,4 +15,4 @@ class Event (
     val title: String,
     val id: String,
     val cupons: List<Cupons>
-)
+) : Parcelable
