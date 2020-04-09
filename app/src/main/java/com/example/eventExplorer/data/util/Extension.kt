@@ -5,7 +5,7 @@ import com.example.eventExplorer.MainApplication
 import com.example.eventExplorer.R
 import com.example.eventExplorer.domain.model.Event
 import com.example.eventExplorer.domain.model.ResponseResult
-import com.example.eventExplorer.presentation.screen.EventView
+import com.example.eventExplorer.presentation.model.EventView
 import retrofit2.Response
 import java.text.DecimalFormat
 import java.text.NumberFormat

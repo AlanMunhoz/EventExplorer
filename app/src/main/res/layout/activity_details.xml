@@ -11,6 +11,10 @@
         <variable
             name="viewModel"
             type="com.example.eventExplorer.presentation.viewModel.EventViewModel" />
+
+        <variable
+            name="eventBinding"
+            type="com.example.eventExplorer.domain.model.Event" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -31,6 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
+                app:title="@{eventBinding.title}"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <ImageView
@@ -38,6 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:contentDescription="@string/event_image"
+                    app:loadImage="@{ eventBinding.image }"
                     android:scaleType="centerCrop" />
 
                 <androidx.appcompat.widget.Toolbar
@@ -124,6 +130,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline2"
                         app:layout_constraintTop_toTopOf="@+id/calendarView"
+                        android:text="@{eventBinding.getDateLabel()}"
                         tools:text="Sábado, 18 de Abril" />
 
                     <TextView
@@ -135,6 +142,7 @@
                         app:layout_constraintEnd_toEndOf="@+id/dateLabelView"
                         app:layout_constraintStart_toStartOf="@+id/guideline2"
                         app:layout_constraintTop_toBottomOf="@+id/dateLabelView"
+                        android:text="@{eventBinding.getHourLabel()}"
                         tools:text="10:30" />
 
                     <ImageView
@@ -156,6 +164,7 @@
                         app:layout_constraintEnd_toEndOf="@+id/hourLabelView"
                         app:layout_constraintStart_toStartOf="@+id/guideline2"
                         app:layout_constraintTop_toTopOf="@+id/pinView"
+                        android:text="@{eventBinding.getCityLabel()}"
                         tools:text="Porto Alegre" />
 
                     <TextView
@@ -167,6 +176,7 @@
                         app:layout_constraintEnd_toEndOf="@+id/cityLabelView"
                         app:layout_constraintStart_toStartOf="@+id/guideline2"
                         app:layout_constraintTop_toBottomOf="@+id/cityLabelView"
+                        android:text="@{eventBinding.getAddressLabel()}"
                         tools:text="Av. Osvaldo Aranha, 299, Centro" />
 
                     <ImageView
@@ -187,6 +197,7 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintStart_toStartOf="@+id/guideline2"
                         app:layout_constraintTop_toTopOf="@+id/ticketView"
+                        android:text="@{eventBinding.getPriceLabel()}"
                         tools:text="R$49,90" />
 
                     <View
@@ -222,6 +233,7 @@
                         app:layout_constraintEnd_toEndOf="@+id/addressLabelView"
                         app:layout_constraintStart_toStartOf="@+id/guideline1"
                         app:layout_constraintTop_toBottomOf="@+id/aboutLabelView"
+                        android:text="@{eventBinding.description}"
                         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc nec commodo odio. Fusce auctor molestie sem ut scelerisque. Nullam vel mi ornare, dapibus erat eu, imperdiet velit. Sed sodales tellus nisl, a tempor diam lacinia ut. Integer sed suscipit velit, sit amet cursus urna. Ut et lacinia nunc, vitae finibus diam." />
 
                     <View

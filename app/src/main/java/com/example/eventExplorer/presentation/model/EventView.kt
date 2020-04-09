@@ -1,4 +1,4 @@
-package com.example.eventExplorer.presentation.screen
+package com.example.eventExplorer.presentation.model
 
 class EventView(
     var title: String,

@@ -20,9 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
 
 class DetailsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -37,6 +35,7 @@ class DetailsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         viewBinding = DataBindingUtil.setContentView(this, R.layout.activity_details)
         viewBinding.viewModel = viewModel
+        viewBinding.eventBinding = eventExtra
         viewBinding.lifecycleOwner = this
 
         viewModel.event.observe(this, Observer { responseResult ->
@@ -59,23 +58,6 @@ class DetailsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mapFragment = supportFragmentManager.findFragmentById(viewBinding.mapView.id) as SupportMapFragment
         mapFragment?.getMapAsync(this)
-
-        eventExtra?.let { event ->
-            viewBinding.apply {
-                collapseToolbar.title = event.title
-                Picasso.get()
-                    .load(event.image)
-                    .placeholder(R.drawable.placeholder_img)
-                    .error(R.drawable.error_img)
-                    .into(viewBinding.photoView)
-                dateLabelView.text = Date(event.date).toFormattedString()
-                hourLabelView.text = Date(event.date).toHour()
-                cityLabelView.text = getCity(event.latitude, event.longitude)
-                addressLabelView.text = getFullAddress(event.latitude, event.longitude)
-                priceLabelView.text = event.price.toCurrency()
-                descLabelView.text = event.description
-            }
-        }
 
         viewBinding.checkinFab.setOnClickListener {
             eventExtra?.apply {

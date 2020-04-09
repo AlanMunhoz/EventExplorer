@@ -16,36 +16,21 @@ class EventViewModel(
     private val postCheckin: PostCheckin
 ) : ViewModel() {
 
-    var eventId: Int = 1
+    private var eventId: Int = 1
 
     private val _requestInProgress = MutableLiveData<Boolean>()
     val requestInProgress: LiveData<Boolean>
         get() = _requestInProgress
 
-    private val _event = MutableLiveData<ResponseResult<Event>>()
-    val event: LiveData<ResponseResult<Event>>
-        get() = _event
-
     private val _eventListResult = MutableLiveData<ResponseResult<List<Event>>>()
     val eventListResult: LiveData<ResponseResult<List<Event>>>
         get() = _eventListResult
 
-    var eventList : ArrayList<Event> = ArrayList()
+    private val _event = MutableLiveData<ResponseResult<Event>>()
+    val event: LiveData<ResponseResult<Event>>
+        get() = _event
 
-    fun loadEvent() {
-        viewModelScope.launch {
-            try {
-                _requestInProgress.postValue(true)
-                _event.postValue(getEvent(eventId))
-                eventId++
-            } catch (e: Exception) {
-                _event.postValue(ResponseResult.Failure("ExceptionMessage: ${e.message}"))
-                e.printStackTrace()
-            } finally {
-                _requestInProgress.postValue(false)
-            }
-        }
-    }
+    var eventList : ArrayList<Event> = ArrayList()
 
     fun loadEventList() {
         viewModelScope.launch {
@@ -54,9 +39,29 @@ class EventViewModel(
                 getEventList().apply {
                     if(this is ResponseResult.Success) {
                         eventList = ArrayList(data)
-                        eventId = eventList.lastOrNull()?.id?.toIntOrNull() ?: 0 + 1
+                        eventId = (eventList.lastOrNull()?.id?.toIntOrNull() ?: 0) + 1
                     }
                     _eventListResult.postValue(this)
+                }
+            } catch (e: Exception) {
+                _eventListResult.postValue(ResponseResult.Failure("ExceptionMessage: ${e.message}"))
+                e.printStackTrace()
+            } finally {
+                _requestInProgress.postValue(false)
+            }
+        }
+    }
+
+    fun loadEvent() {
+        viewModelScope.launch {
+            try {
+                _requestInProgress.postValue(true)
+                getEvent(eventId).apply {
+                    if (this is ResponseResult.Success) {
+                        eventList.add(data)
+                        eventId++
+                    }
+                    _event.postValue(this)
                 }
             } catch (e: Exception) {
                 _event.postValue(ResponseResult.Failure("ExceptionMessage: ${e.message}"))
@@ -73,7 +78,6 @@ class EventViewModel(
             try {
                 postCheckin(checkin)
             } catch (e: Exception) {
-                _event.postValue(ResponseResult.Failure("ExceptionMessage: ${e.message}"))
                 e.printStackTrace()
             }
         }

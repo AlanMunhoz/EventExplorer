@@ -1,10 +1,11 @@
-package com.example.eventExplorer.presentation.screen
+package com.example.eventExplorer.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eventExplorer.R
+import com.example.eventExplorer.presentation.model.EventView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.event_card.view.*
 
@@ -37,13 +38,13 @@ class EventAdapter(
 
     override fun getItemCount() = eventList.size
 
-    fun insert(eventItem: EventView) {
-        eventList.add(eventItem)
+    fun setList(eventList: List<EventView>) {
+        this.eventList = ArrayList(eventList)
         notifyDataSetChanged()
     }
 
-    fun setList(eventList: List<EventView>) {
-        this.eventList = ArrayList(eventList)
+    fun insertList(event: EventView) {
+        this.eventList.add(event)
         notifyDataSetChanged()
     }
 }

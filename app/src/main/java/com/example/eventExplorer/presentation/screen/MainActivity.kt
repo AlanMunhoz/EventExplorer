@@ -8,18 +8,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.eventExplorer.R
 import com.example.eventExplorer.data.util.toEventView
 import com.example.eventExplorer.databinding.ActivityMainBinding
 import com.example.eventExplorer.domain.model.Event
 import com.example.eventExplorer.domain.model.ResponseResult
+import com.example.eventExplorer.presentation.adapter.EventAdapter
 import com.example.eventExplorer.presentation.viewModel.EventViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(),
-    EventAdapter.ClickCallback,
-    SwipeRefreshLayout.OnRefreshListener {
+    EventAdapter.ClickCallback {
 
     private lateinit var viewBinding: ActivityMainBinding
     private val viewModel: EventViewModel by viewModel()
@@ -33,7 +32,14 @@ class MainActivity : AppCompatActivity(),
 
         viewModel.eventListResult.observe(this, Observer { responseResult ->
             when (responseResult) {
-                is ResponseResult.Success -> showResult(responseResult.data)
+                is ResponseResult.Success -> populateList(responseResult.data)
+                is ResponseResult.Failure -> showError()
+            }
+        })
+
+        viewModel.event.observe(this, Observer { responseResult ->
+            when (responseResult) {
+                is ResponseResult.Success -> insertList(responseResult.data)
                 is ResponseResult.Failure -> showError()
             }
         })
@@ -52,7 +58,6 @@ class MainActivity : AppCompatActivity(),
             adapter = EventAdapter(ArrayList(), this@MainActivity)
             addOnScrollListener(onScrollListener)
         }
-        viewBinding.srSwipeRefresh.setOnRefreshListener(this)
         viewModel.loadEventList()
     }
 
@@ -67,9 +72,7 @@ class MainActivity : AppCompatActivity(),
         object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-
                 if (dy == 0) return
-
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 if (layoutManager.findLastCompletelyVisibleItemPosition() == layoutManager.itemCount - 1) {
                     viewModel.loadEvent()
@@ -78,8 +81,12 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    private fun showResult(result: List<Event>) {
+    private fun populateList(result: List<Event>) {
         viewBinding.rvList.apply { (adapter as EventAdapter).setList(result.map { it.toEventView() }) }
+    }
+
+    private fun insertList(result: Event) {
+        viewBinding.rvList.apply { (adapter as EventAdapter).insertList(result.toEventView()) }
     }
 
     private fun showError() {
@@ -97,7 +104,4 @@ class MainActivity : AppCompatActivity(),
         startActivity(target)
     }
 
-    override fun onRefresh() {
-        viewModel.loadEventList()
-    }
 }
